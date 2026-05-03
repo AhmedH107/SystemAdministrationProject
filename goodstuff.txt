@@ -1,0 +1,113 @@
+
+NET
+Good to remember:
+    apt update
+    apt install nftables
+    systemctl enable nftables
+    systemctl restart nftables
+    systemctl status nftables
+
+https://wiki.nftables.org/wiki-nftables/index.php/Quick_reference-nftables_in_10_minutes
+
+https://www.youtube.com/watch?v=LLbxgVbu4S8
+
+
+
+DNS
+## root@server:~# cat /etc/resolv.conf 
+nameserver 10.0.2.3
+
+
+pytest on VMs
+
+apt update
+apt install python3-pytest -y
+pytest-3 -q NET_tests.py
+
+
+LDAP 
+
+sudo usermod -u 1002 testuser #change id
+sudo groupmod -g 1002 testuser
+
+ldapsearch -x -b dc=superldap,dc=se uid=<user>
+
+ldapsearch -x -LLL -b dc=superldap,dc=se uid=<username> uidNumber gidNumber
+
+ldapsearch -x -H ldap://server.grupp13.liu.se -b dc=superldap,dc=se uid=*
+
+ldapsearch -x -b "ou=Users,dc=superldap,dc=se"
+
+
+
+STO
+
+mount -t nfs4 10.0.0.2:/home-storage1 /mnt
+
+usela931:fwtlSVaP
+
+usela537:zp15eRt9
+
+filer:
+root@client-1:~# cat /etc/auto.master
+#
+# Sample auto.master file
+# This is a 'master' automounter map and it has the following format:
+# mount-point [map-type[,format]:]map [options]
+# For details of the format look at auto.master(5).
+#
+#/misc	/etc/auto.misc
+#
+# NOTE: mounts done from a hosts map will be mounted with the
+#	"nosuid" and "nodev" options unless the "suid" and "dev"
+#	options are explicitly given.
+#
+#/net	-hosts
+#
+# Include /etc/auto.master.d/*.autofs
+# To add an extra map using this mechanism you will need to add
+# two configuration items - one /etc/auto.master.d/extra.autofs file
+# (using the same line format as the auto.master file)
+# and a separate mount map (e.g. /etc/auto.extra or an auto.extra NIS map)
+# that is referred to by the extra.autofs file.
+#
++dir:/etc/auto.master.d
+#
+# If you have fedfs set up and the related binaries, either
+# built as part of autofs or installed from another package,
+# uncomment this line to use the fedfs program map to access
+# your fedfs mounts.
+#/nfs4  /usr/sbin/fedfs-map-nfs4 nobind
+#
+# Include central master map if it can be found using
+# nsswitch sources.
+#
+# Note that if there are entries for /net or /misc (as
+# above) in the included master map any keys that are the
+# same will not be seen as the first read key seen takes
+# precedence.
+#
++auto.master
+/home   /etc/auto.home   --timeout=60
+
+auto.home:
+root@client-1:~# cat /etc/auto.home 
+usela931 -fstype=nfs4 10.0.0.2:/home-storage1/usela931
+usela537 -fstype=nfs4 10.0.0.2:/home-storage2/usela537
+root@client-1:~# 
+
+
+-> Klar med andle967
+andle967:rNnd4qzs
+
+Successfully set password for user uid=usela931,ou=Users,dc=superldap,dc=se
+  -> Klar med usela931
+usela931:fwtlSVaP
+Successfully set password for user uid=usela537,ou=Users,dc=superldap,dc=se
+  -> Klar med usela537
+usela537:zp15eRt9
+
+Monterade sedan 
+root@client-1:~# mount -t nfs4 10.0.0.2:/home-storage1 /mnt                
+root@client-1:~# ls /mnt/
+lost+found  usela931
